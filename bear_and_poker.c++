@@ -1,40 +1,36 @@
+#pragma GCC optimize ("Ofast")
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cstdio>
 using namespace std;
 
+#pragma GCC optimize ("Ofast")
+int rem3(int a) {
+    return ((a%3) == 0) ? rem3(a/3) : a;
+}
 
-int gcd(int a, int b) {
-    return b == 0 ? a : gcd(b, a % b);
+int rem2(int a) {
+    return a >> __builtin_ctz(a);
 }
 
 int main()
 {
-    vector <int>bid;
-    int n=-1,m=-1,i;
-    cin >> n;
-    bid.reserve(n);
+    static int n=-1,m=-1,i, prev;
+    fscanf(stdin,"%d",&n);
+    prev = -1;
     for (i=0; i < n; ++i) {
-        cin >> m;
-        bid.push_back(m);
+        fscanf(stdin,"%d",&m);
+        m = rem3(rem2(m));
+        if (prev >= 0) {
+            if (m != prev) {
+                printf("No\n");fflush(stdout);
+                return 0;
+            }
+        } else {
+            prev = m;
+        }
     }
-    if (n == 1) {
-        cout << "Yes" << endl;
-        exit(0);
-    }
-    int g = bid[0];
-    for (auto i: bid) {
-        g = gcd(g,i);
-    }
-    for (i=0; i < bid.size(); ++i) {
-        bid[i] /= g;
-        bid[i] %= 3*2;
-        //bid[i] %= 2;
-    }
-    //cout << "gcd:" << g << endl;
-    cout << ((all_of(bid.begin(), bid.end(), [](int i){return i == 0 || i == 2 || i == 3 ;})) ? "Yes" : "No") << endl;
-    //for (auto i: bid) {
-    //    cout << i << endl;
-    //}
-
+    printf("Yes\n");fflush(stdout);
     return 0;
 }
